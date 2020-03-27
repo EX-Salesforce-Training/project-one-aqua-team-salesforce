@@ -1,0 +1,23 @@
+<apex:page controller="ShippingDetailController">
+    <apex:form >
+        <apex:pageBlock >
+            <apex:inputField value="{!packValue.Delivery_Status__c}"/>
+            <apex:commandButton action="{!generatePackList}" value="Select" reRender="display"/>
+        </apex:pageBlock> 
+        
+        <apex:pageBlock id="display" title="Packages">
+            
+            <apex:commandButton action="{!setPreviousStartPoint}" value="Previous" reRender="display"/>
+            <apex:commandButton action="{!setNextStartPoint}" value="Next" reRender="display"/>
+                       
+            	<apex:pageBlockTable value="{!packList}" var="Package__c"> 
+            		<apex:column value="{!Package__c.name}"/>                
+            	</apex:pageBlockTable>
+
+            <apex:commandButton action="{!setPreviousStartPoint}" value="Previous" reRender="display"/>            
+            <apex:commandButton action="{!setNextStartPoint}" value="Next" reRender="display"/>
+
+        </apex:pageBlock> 
+        
+    </apex:form> 
+</apex:page>
