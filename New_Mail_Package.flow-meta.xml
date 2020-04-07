@@ -63,16 +63,116 @@
         </rules>
     </decisions>
     <decisions>
+        <description>Four outcomes: 
+New Account + New Location
+New Account + Existing Location
+Existing Account + New Location
+Existing Account + Existing Location</description>
+        <name>New_Package_Split</name>
+        <label>New Package Split</label>
+        <locationX>865</locationX>
+        <locationY>46</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>New_Account_New_Location</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>New_Location</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>New_customer</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Mail_Package</targetReference>
+            </connector>
+            <label>New Account New Location</label>
+        </rules>
+        <rules>
+            <name>New_Account_Existing_Location</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>New_customer</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>New_Location</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Package_With_New_Customer_Existing_Location</targetReference>
+            </connector>
+            <label>New Account Existing Location</label>
+        </rules>
+        <rules>
+            <name>Existing_Account_New_Location</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>New_customer</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>New_Location</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>New_Location_Only</targetReference>
+            </connector>
+            <label>Existing Account New Location</label>
+        </rules>
+        <rules>
+            <name>Existing_Account_Existing_Location</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>New_customer</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>New_Location</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Everything_Exists</targetReference>
+            </connector>
+            <label>Existing Account Existing Location</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Recipient_Decision</name>
         <label>Recipient Decision</label>
-        <locationX>651</locationX>
-        <locationY>84</locationY>
+        <locationX>492</locationX>
+        <locationY>28</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Location_Yes</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Is_this_location_in_the_system</leftValueReference>
+                <leftValueReference>New_Location</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -87,7 +187,7 @@
             <name>Location_No</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Is_this_location_in_the_system</leftValueReference>
+                <leftValueReference>New_Location</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -118,8 +218,8 @@
         <description>User selected &#39;yes&#39; on &#39;new customer&#39; checkbox.</description>
         <name>Checked_New_Account</name>
         <label>Checked New Account</label>
-        <locationX>338</locationX>
-        <locationY>348</locationY>
+        <locationX>252</locationX>
+        <locationY>216</locationY>
         <assignRecordIdToReference>Create_New_Account.Id</assignRecordIdToReference>
         <connector>
             <targetReference>Recipient_Location</targetReference>
@@ -163,10 +263,11 @@
         <object>Account</object>
     </recordCreates>
     <recordCreates>
+        <description>With create new account and create new location</description>
         <name>Create_Mail_Package</name>
         <label>Create Mail Package</label>
-        <locationX>660</locationX>
-        <locationY>478</locationY>
+        <locationX>890</locationX>
+        <locationY>220</locationY>
         <connector>
             <targetReference>Thank_You</targetReference>
         </connector>
@@ -210,11 +311,152 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordCreates>
+        <name>Everything_Exists</name>
+        <label>Everything Exists</label>
+        <locationX>1170</locationX>
+        <locationY>162</locationY>
+        <connector>
+            <targetReference>Thank_You</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>Not_Checked_New_Account.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Delivery_Status__c</field>
+            <value>
+                <stringValue>In Transit</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Insurance_Amount__c</field>
+            <value>
+                <elementReference>Insurance_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Insured__c</field>
+            <value>
+                <elementReference>Insured</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Recipient_Location__c</field>
+            <value>
+                <elementReference>Recipient_Location_Exists.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Weight__c</field>
+            <value>
+                <elementReference>Weight</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Package__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>New_Location_Only</name>
+        <label>New Location Only</label>
+        <locationX>1205</locationX>
+        <locationY>71</locationY>
+        <connector>
+            <targetReference>Thank_You</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>Not_Checked_New_Account.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Delivery_Status__c</field>
+            <value>
+                <stringValue>In Transit</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Insurance_Amount__c</field>
+            <value>
+                <elementReference>Insurance_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Insured__c</field>
+            <value>
+                <elementReference>Insured</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Recipient_Location__c</field>
+            <value>
+                <elementReference>Create_New_Recipient_Location.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Weight__c</field>
+            <value>
+                <elementReference>Weight</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Package__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Package_With_New_Customer_Existing_Location</name>
+        <label>Package With New Customer Existing Location</label>
+        <locationX>1026</locationX>
+        <locationY>210</locationY>
+        <connector>
+            <targetReference>Thank_You</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>Checked_New_Account</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Delivery_Status__c</field>
+            <value>
+                <stringValue>In Transit</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Insurance_Amount__c</field>
+            <value>
+                <elementReference>Insurance_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Insured__c</field>
+            <value>
+                <elementReference>Insured</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Recipient_Location__c</field>
+            <value>
+                <elementReference>Recipient_Location_Exists.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Weight__c</field>
+            <value>
+                <elementReference>Weight</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Package__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
         <description>The location is not in the database.</description>
         <name>Recipient_Location_Not_Found</name>
         <label>Recipient Location Not Found</label>
-        <locationX>656</locationX>
-        <locationY>292</locationY>
+        <locationX>496</locationX>
+        <locationY>177</locationY>
         <assignRecordIdToReference>Create_New_Recipient_Location.Id</assignRecordIdToReference>
         <connector>
             <targetReference>Package_Details</targetReference>
@@ -255,8 +497,8 @@
         <description>The user selected &#39;no&#39; on the &#39;new customer&#39; checkbox</description>
         <name>Not_Checked_New_Account</name>
         <label>Not Checked New Account</label>
-        <locationX>191</locationX>
-        <locationY>161</locationY>
+        <locationX>167</locationX>
+        <locationY>39</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Recipient_Location</targetReference>
@@ -276,8 +518,8 @@
         <description>We found the recipient location.</description>
         <name>Recipient_Location_Exists</name>
         <label>Recipient Location Exists</label>
-        <locationX>955</locationX>
-        <locationY>211</locationY>
+        <locationX>695</locationX>
+        <locationY>48</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Package_Details</targetReference>
@@ -297,13 +539,13 @@
         <description>Now we can fill out the details of the package.</description>
         <name>Package_Details</name>
         <label>Package Details</label>
-        <locationX>844</locationX>
-        <locationY>370</locationY>
+        <locationX>656</locationX>
+        <locationY>212</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Create_Mail_Package</targetReference>
+            <targetReference>New_Package_Split</targetReference>
         </connector>
         <fields>
             <name>Shipping_Speed</name>
@@ -362,8 +604,8 @@
         <description>Enter the location name</description>
         <name>Recipient_Location</name>
         <label>Recipient Location</label>
-        <locationX>447</locationX>
-        <locationY>74</locationY>
+        <locationX>312</locationX>
+        <locationY>32</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -378,7 +620,7 @@
             <isRequired>false</isRequired>
         </fields>
         <fields>
-            <name>Is_this_location_in_the_system</name>
+            <name>New_Location</name>
             <dataType>Boolean</dataType>
             <defaultValue>
                 <booleanValue>false</booleanValue>
@@ -396,7 +638,7 @@
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
-                    <leftValueReference>Is_this_location_in_the_system</leftValueReference>
+                    <leftValueReference>New_Location</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <booleanValue>true</booleanValue>
@@ -413,7 +655,7 @@
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
-                    <leftValueReference>Is_this_location_in_the_system</leftValueReference>
+                    <leftValueReference>New_Location</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <booleanValue>true</booleanValue>
@@ -430,7 +672,7 @@
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
-                    <leftValueReference>Is_this_location_in_the_system</leftValueReference>
+                    <leftValueReference>New_Location</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <booleanValue>true</booleanValue>
@@ -448,7 +690,7 @@
             <visibilityRule>
                 <conditionLogic>and</conditionLogic>
                 <conditions>
-                    <leftValueReference>Is_this_location_in_the_system</leftValueReference>
+                    <leftValueReference>New_Location</leftValueReference>
                     <operator>EqualTo</operator>
                     <rightValue>
                         <booleanValue>true</booleanValue>
@@ -463,8 +705,8 @@
         <description>Thank you!</description>
         <name>Thank_You</name>
         <label>Thank You!</label>
-        <locationX>478</locationX>
-        <locationY>469</locationY>
+        <locationX>1274</locationX>
+        <locationY>408</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
