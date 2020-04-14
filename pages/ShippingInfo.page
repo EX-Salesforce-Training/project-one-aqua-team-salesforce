@@ -1,0 +1,40 @@
+<apex:page controller="ShippingDetailController" showHeader="false">
+    <apex:form style="background-color: blue;" >
+        <apex:pageBlock >
+            <style type="text/css">
+          		p { font-weight: bold;
+              		font-size: 22px;
+              		color: blue;
+                	padding-bottom:10px;
+                	font-family: sans serif;
+             	  }
+                .button {
+                font-size = 15px;
+                }
+                
+            </style>
+            <p> Check the status of your package </p>
+            <apex:inputField value="{!packValue.Delivery_Status__c}" style="font-size: 15px"/>
+            <apex:commandButton action="{!generatePackList}" value="Select" reRender="display" style="font-size: 15px"/>
+        </apex:pageBlock> 
+        
+        <apex:pageBlock id="display" title="Package" >
+            <apex:facet name="header">
+                <span style = "color: blue; font-family: sans serif; 
+                               font-size:22px; font-weight: bold; margin: 14px;">Package</span>
+            </apex:facet>
+            
+            <apex:commandButton action="{!setPreviousStartPoint}" value="Previous" reRender="display" style="font-size: 12px"/>
+            <apex:commandButton action="{!setNextStartPoint}" value="Next" reRender="display" style="font-size: 12px"/>
+                       
+            	<apex:pageBlockTable value="{!packList}" var="Package__c" style="font-size:17px; margin: 10px"> 
+            		<apex:column value="{!Package__c.name}"/>                
+            	</apex:pageBlockTable>
+
+            <apex:commandButton action="{!setPreviousStartPoint}" value="Previous" reRender="display" style="font-size: 12px"/>            
+            <apex:commandButton action="{!setNextStartPoint}" value="Next" reRender="display" style="font-size: 12px"/>
+
+        </apex:pageBlock> 
+        
+    </apex:form> 
+</apex:page>

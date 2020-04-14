@@ -1,0 +1,87 @@
+<apex:page controller="FindEditController" showHeader="false" >
+    <apex:form style="background-color: blue;">
+        <apex:pageBlock >
+            <style type="text/css">
+          		p { font-weight: bold;
+              		font-size: 22px;
+              		color: blue;
+                	padding-bottom:10px;
+                	font-family: sans serif;
+             	  }
+                
+                .accInfo{
+                font-size: 17px;
+                font-family: sans serif;
+                }
+                
+                .fonts {
+                font-size: 17px;
+                font-family: sans serif;
+                }
+    		</style> 
+            
+            <p> Type here to find your account</p>
+            <apex:inputText value="{!s}" style="font-size: 15px"/>
+            <apex:commandButton action="{!FindAccount}" value="Find Account " reRender="display" style="font-size: 15px" > <apex:actionSupport event="onClick" reRender="displayContact" /> </apex:commandButton>
+        </apex:pageBlock> 
+        
+        <apex:pageBlock id="display" title="Accounts"  html-style="font-size: 18px" >
+            <apex:facet name="header">
+                <span style = "color: blue; font-family: sans serif; font-size:22px; font-weight: bold; margin-left: 14px;">Accounts</span>
+            </apex:facet>
+            
+            <apex:pageBlockTable value="{!acc}" var="Account"> 
+                <apex:column value="{!Account.Name}" styleClass="accInfo"/>
+                <apex:column value="{!Account.Phone}" styleClass="accInfo"/>
+                <apex:column value="{!Account.ShippingStreet}" styleClass="accInfo"/>
+                <apex:column value="{!Account.ShippingCity}" styleClass="accInfo"/>
+                <apex:column value="{!Account.ShippingState}" styleClass="accInfo"/> 
+                <apex:column value="{!Account.ShippingCountry}" styleClass="accInfo"/>
+                <apex:column value="{!Account.ShippingPostalCode}" styleClass="accInfo"/>
+                
+            </apex:pageBlockTable>         
+            
+            <!-- </apex:pageBlock> -->
+            
+            <!-- <apex:pageBlock id="displayContact" title="Contacts information">-->
+            
+            <apex:pageBlockTable value="{!Cons}" var="obj"> 
+                <apex:column value="{!obj.FirstName}" styleClass="accInfo"/>
+                <apex:column value="{!obj.LastName}" styleClass="accInfo"/>
+                <apex:column value="{!obj.Email}" styleClass="accInfo"/>
+                
+            </apex:pageBlockTable>       
+        </apex:pageBlock>       
+        
+        
+        <apex:pageBlock >
+            <apex:pageBlockSection title="Update Account" html-style="font-size: 18px;" >
+                <apex:facet name="header">
+                    <span style= "font-family:sans serif; font-size: 20px; "> Update Account</span>
+                </apex:facet>
+                Name
+                <apex:outputText value="{!Name}" styleClass="fonts"/>
+                <apex:inputText value="{!Name}" styleClass="fonts" />
+                Phone
+                <apex:outputText value="{!phone}" styleClass="fonts"/>
+                <apex:inputText value="{!phone}" styleClass="fonts" />
+                Street
+                <apex:outputText value="{!street}" styleClass="fonts"/>
+                <apex:inputText value="{!street}" styleClass="fonts" />
+                City
+                <apex:outputText value="{!city}" styleClass="fonts"/>
+                <apex:inputText value="{!city}" styleClass="fonts"  />
+                State
+                <apex:outputText value="{!state}" styleClass="fonts"/>
+                <apex:inputText value="{!state}" styleClass="fonts" />
+                Country
+                <apex:outputText value="{!country}" styleClass="fonts"/>
+                <apex:inputText value="{!country}" styleClass="fonts"/>
+                ZipCode
+                <apex:outputText value="{!postalCode}" styleClass="fonts"/>
+                <apex:inputText value="{!postalCode}" styleClass="fonts" />
+            </apex:pageBlockSection>
+            <apex:commandButton action="{!upateAccontName}" value="Update" reRender="display" style="margin-top: 15px; margin-left:10px; font-size:15px" > </apex:commandButton>
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

@@ -1,0 +1,36 @@
+<apex:page controller="MailController">
+    <apex:form style="background-color: blue;">
+        <apex:pageBlock >
+            <style type="text/css">
+          		p { font-weight: bold;
+              		font-size: 22px;
+              		color: blue;
+                	padding-bottom:10px;
+                	font-family: sans serif;
+             	  }
+                .packInfo {
+                font-size: 17px;
+                font-family: sans serif;
+                }
+            </style>
+            <p> Enter your tracking number for package details </p>
+            <apex:inputText value="{!trackNumber}" id="inputPackageNum" style="font-size: 15px"/>
+    		<apex:commandButton action="{!generatePackageList}" value="Search" reRender="display" style="font-size: 15px"/>
+        </apex:pageBlock>
+    
+        <apex:pageBlock id="display" title="Package Details">
+            <apex:facet name="header">
+                <span style = "color: blue; font-family: sans serif; font-size:22px; 
+                               font-weight: bold; margin: 14px;"> Package Details </span>
+            </apex:facet>
+            
+    		<apex:pageBlockTable value="{!PackageList}" var="Package__c" style="font-size:17px; margin: 10px">
+        		<apex:column value="{!Package__c.name}" styleClass="packInfo"/>
+            	<apex:column value="{!Package__c.Account__c}" styleClass="packInfo"/>
+            	<apex:column value="{!Package__c.Delivery_Status__c}" styleClass="packInfo"/>
+            	<apex:column value="{!Package__c.Recipient_Location__c}" styleClass="packInfo"/>
+            	<apex:column value="{!Package__c.Weight__c}" styleClass="packInfo"/>
+        	</apex:pageBlockTable>
+    	</apex:pageBlock>
+    </apex:form>
+</apex:page>
